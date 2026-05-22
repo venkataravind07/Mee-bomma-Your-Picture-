@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>meeBomma – Stream Telugu Cinema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo" onclick="showPage('home');return false;">
+      <span class="logo-mee">mee</span><span class="logo-bomma">Bomma</span>
+      <span class="logo-dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link active" onclick="showPage('home');setActive(this);return false;">Home</a></li>
+      <li><a href="#" class="nav-link" onclick="showPage('movies');setActive(this);return false;">Movies</a></li>
+      <li><a href="#" class="nav-link" onclick="showPage('series');setActive(this);return false;">Series</a></li>
+      <li><a href="#" class="nav-link" onclick="showPage('downloads');setActive(this);return false;">Downloads</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="search-btn" onclick="toggleSearch()">⌕</button>
+      <button class="btn-subscribe" onclick="showPage('subscribe')">Subscribe</button>
+      <div class="avatar" onclick="toggleProfileMenu()">P</div>
+    </div>
+    <button class="hamburger" onclick="toggleMobileNav()">☰</button>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <input type="text" id="searchInput" placeholder="Search movies, series, actors..." oninput="handleSearch(this.value)">
+    <button onclick="toggleSearch()">✕</button>
+  </div>
+  <div class="profile-menu" id="profileMenu">
+    <div class="pm-header">
+      <div class="pm-avatar">P</div>
+      <div><div class="pm-name">Puneeth</div><div class="pm-plan">Free Plan</div></div>
+    </div>
+    <a href="#" onclick="showPage('subscribe');toggleProfileMenu();return false;">⚡ Upgrade to Pro</a>
+    <a href="#" onclick="showPage('downloads');toggleProfileMenu();return false;">⬇ My Downloads</a>
+    <a href="#">⚙ Settings</a>
+    <a href="#" class="pm-logout">↩ Sign Out</a>
+  </div>
+</nav>
+
+<!-- BookMyShow Strip -->
+<div class="bms-strip">
+  <span class="bms-logo">BookMyShow</span>
+  <span>meeBomma streams movies 24 hrs after theatrical release ·</span>
+  <a href="https://in.bookmyshow.com" target="_blank" rel="noopener">Book theatre tickets →</a>
+</div>
+
+<!-- PAGE: HOME -->
+<div class="page active" id="page-home">
+
+  <!-- HERO — Guntur Kaaram as #1 Recommendation -->
+  <section class="hero">
+    <div class="hero-bg-wrap">
+      <img class="hero-bg-img"
+        src="https://upload.wikimedia.org/wikipedia/en/3/33/Guntur_Kaaram_poster.jpg"
+        alt="Guntur Kaaram"
+        onerror="this.src='https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&q=80'">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">⭐ #1 Recommendation For You</div>
+      <h1 class="hero-title">Guntur Kaaram</h1>
+      <p class="hero-meta">2024 &nbsp;·&nbsp; Action / Drama &nbsp;·&nbsp; 2h 39m &nbsp;·&nbsp; Telugu</p>
+      <p class="hero-director">Dir. Trivikram Srinivas &nbsp;·&nbsp; Mahesh Babu, Sreeleela, Ramya Krishnan</p>
+      <p class="hero-desc">Years after his mother abandons him and remarries, a man demands answers when asked to sign a document denying he is her son — as she runs for political office. A powerful Trivikram family drama starring Mahesh Babu at his finest.</p>
+      <div class="hero-tags">
+        <span class="badge-free">FREE · HD</span>
+        <span class="badge-pro">4K + Dolby Atmos · Pro</span>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-play" onclick="showPlayer('guntur-kaaram')">&#9654; Play Now</button>
+        <button class="btn-ghost" onclick="showModal('guntur-kaaram')">&#8505; More Info</button>
+        <button class="btn-dl" onclick="showDownloadModal('Guntur Kaaram')">&#8595; Offline</button>
+      </div>
+    </div>
+    <div class="hero-scroll">↓</div>
+  </section>
+
+  <!-- IN THEATRES — Real 2025 releases from BookMyShow -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title"><span class="pulse-dot"></span> In Theatres — Available to Stream</h2>
+      <span class="section-sub bms-powered">📍 via BookMyShow · Streams 24 hrs after release</span>
+    </div>
+    <div class="cards-row" id="newReleases"></div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🔶 Recommended For You</h2>
+      <a href="#" class="see-all" onclick="showPage('movies');return false;">See all →</a>
+    </div>
+    <div class="cards-row" id="recommended"></div>
+  </section>
+
+  <!-- TRENDING -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Trending Now</h2>
+    </div>
+    <div class="cards-row" id="trending"></div>
+  </section>
+
+  <!-- 4K PROMO BANNER -->
+  <section class="promo-banner">
+    <div class="promo-inner">
+      <div>
+        <h3>Experience Cinema in 4K + Dolby Atmos</h3>
+        <p>Ultra-HD clarity with theatre-grade immersive audio. Watch on any screen.</p>
+      </div>
+      <button class="btn-subscribe" onclick="showPage('subscribe')">Get Pro — ₹149/mo</button>
+    </div>
+  </section>
+
+  <!-- AD BANNER (free users) -->
+  <div class="ad-banner" id="adBanner">
+    <span class="ad-label">Ad</span>
+    <span>Watching free? Ads keep meeBomma free for everyone.</span>
+    <button onclick="showPage('subscribe')">Remove Ads →</button>
+    <button class="ad-close" onclick="this.parentElement.style.display='none'">✕</button>
+  </div>
+
+  <!-- TELUGU CLASSICS -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🏛 Telugu Classics</h2>
+    </div>
+    <div class="cards-row" id="classics"></div>
+  </section>
+
+</div>
+
+<!-- PAGE: MOVIES -->
+<div class="page" id="page-movies">
+  <div class="page-hero-min">
+    <h1>All Movies</h1>
+    <p>Browse our complete library — streams in HD free, 4K with Pro.</p>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterMovies('all',this)">All</button>
+    <button class="filter-btn" onclick="filterMovies('action',this)">Action</button>
+    <button class="filter-btn" onclick="filterMovies('drama',this)">Drama</button>
+    <button class="filter-btn" onclick="filterMovies('comedy',this)">Comedy</button>
+    <button class="filter-btn" onclick="filterMovies('thriller',this)">Thriller</button>
+    <button class="filter-btn" onclick="filterMovies('scifi',this)">Sci-Fi</button>
+    <button class="filter-btn" onclick="filterMovies('romance',this)">Romance</button>
+    <button class="filter-btn" onclick="filterMovies('period',this)">Period</button>
+  </div>
+  <div class="grid-container" id="moviesGrid"></div>
+</div>
+
+<!-- PAGE: SERIES -->
+<div class="page" id="page-series">
+  <div class="page-hero-min">
+    <h1>Web Series & OTT Originals</h1>
+    <p>Binge-worthy Telugu originals, exclusive to meeBomma.</p>
+  </div>
+  <div class="grid-container" id="seriesGrid"></div>
+</div>
+
+<!-- PAGE: DOWNLOADS -->
+<div class="page" id="page-downloads">
+  <div class="page-hero-min">
+    <h1>My Downloads</h1>
+    <p>Offline viewing — watch anywhere, anytime without internet.</p>
+  </div>
+  <div class="downloads-info">
+    <div class="dl-stat"><span>3</span><label>Downloaded</label></div>
+    <div class="dl-stat"><span>8.4 GB</span><label>Used</label></div>
+    <div class="dl-stat"><span>21.6 GB</span><label>Free</label></div>
+  </div>
+  <div class="grid-container" id="downloadsGrid"></div>
+</div>
+
+<!-- PAGE: SUBSCRIBE -->
+<div class="page" id="page-subscribe">
+  <div class="subscribe-page">
+    <div class="sub-header">
+      <h1>Choose Your Plan</h1>
+      <p>Free streaming with ads · Upgrade for 4K, Dolby Atmos &amp; no interruptions</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">₹0 <span>/forever</span></div>
+        <ul class="plan-features">
+          <li>✓ HD streaming (720p)</li>
+          <li>✓ All movies &amp; series</li>
+          <li>✓ Releases after 1 day of theatre</li>
+          <li>✗ Ads between content</li>
+          <li>✗ No 4K / Dolby Atmos</li>
+          <li>✗ Limited offline downloads</li>
+        </ul>
+        <button class="btn-plan-current">Current Plan</button>
+      </div>
+      <div class="plan-card plan-pro">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">₹149 <span>/month</span></div>
+        <ul class="plan-features">
+          <li>✓ 4K Ultra HD + HDR</li>
+          <li>✓ Dolby Atmos Audio</li>
+          <li>✓ Zero Ads</li>
+          <li>✓ Unlimited offline downloads</li>
+          <li>✓ 2 simultaneous screens</li>
+          <li>✓ Early access drops</li>
+        </ul>
+        <button class="btn-plan-pro" onclick="showSubscribeSuccess()">Start Free Trial</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Family</div>
+        <div class="plan-price">₹249 <span>/month</span></div>
+        <ul class="plan-features">
+          <li>✓ Everything in Pro</li>
+          <li>✓ 5 simultaneous screens</li>
+          <li>✓ 5 separate profiles</li>
+          <li>✓ Kids safe mode</li>
+          <li>✓ Priority support</li>
+          <li>✓ Annual billing saves 30%</li>
+        </ul>
+        <button class="btn-plan-pro" onclick="showSubscribeSuccess()">Get Family Plan</button>
+      </div>
+    </div>
+    <div class="sub-note">No hidden fees. Cancel anytime. UPI / Card / Net Banking accepted.</div>
+  </div>
+</div>
+
+<!-- PLAYER MODAL -->
+<div class="modal-overlay" id="playerOverlay" onclick="closePlayer(event)">
+  <div class="player-modal">
+    <div class="player-screen">
+      <div class="player-fake-video" id="playerBg">
+        <img id="playerPoster" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.25;display:none;">
+        <div class="player-title-overlay" id="playerTitle"></div>
+        <div class="player-controls-overlay">
+          <div class="player-progress">
+            <div class="player-bar"><div class="player-fill" id="playerFill"></div></div>
+            <span id="playerTime">0:00</span>
+          </div>
+          <div class="player-btns">
+            <button onclick="togglePlay()" id="playBtn">⏸</button>
+            <button onclick="toggleMute()">🔊</button>
+            <div class="player-vol"><input type="range" min="0" max="100" value="80" id="volSlider"></div>
+            <div class="player-quality-badge" id="qualityBadge">HD</div>
+            <button onclick="showQualityMenu()">⚙</button>
+            <button onclick="closePlayerDirect()">✕</button>
+          </div>
+        </div>
+        <div class="ad-overlay" id="adOverlay">
+          <div class="ad-content">
+            <span class="ad-label">Ad</span>
+            <span>Advertisement – Skip in <span id="adCountdown">5</span>s</span>
+            <button id="skipBtn" disabled onclick="skipAd()">Skip Ad →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="player-info" id="playerInfo"></div>
+  </div>
+</div>
+
+<!-- INFO MODAL -->
+<div class="modal-overlay" id="infoOverlay" onclick="closeModal(event)">
+  <div class="info-modal" id="infoModal"></div>
+</div>
+
+<!-- DOWNLOAD MODAL -->
+<div class="modal-overlay" id="dlOverlay" onclick="closeDlModal(event)">
+  <div class="dl-modal">
+    <h3>Download for Offline Viewing</h3>
+    <p id="dlMovieTitle"></p>
+    <div class="dl-options">
+      <label><input type="radio" name="dlq" value="hd" checked> HD (720p) · ~1.2 GB</label>
+      <label><input type="radio" name="dlq" value="fhd"> Full HD (1080p) · ~2.4 GB · <span class="pro-tag">Pro</span></label>
+      <label><input type="radio" name="dlq" value="4k"> 4K + Dolby Atmos · ~6.1 GB · <span class="pro-tag">Pro</span></label>
+    </div>
+    <div class="dl-modal-actions">
+      <button class="btn-play" onclick="startDownload()">⬇ Download</button>
+      <button class="btn-ghost" onclick="closeDlModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successOverlay" onclick="closeSuccess(event)">
+  <div class="success-modal">
+    <div class="success-icon">⭐</div>
+    <h2>Welcome to meeBomma Pro!</h2>
+    <p>Your 7-day free trial has started. Enjoy 4K, Dolby Atmos, and zero ads.</p>
+    <button class="btn-play" onclick="closeSuccess()">Start Watching</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-mee">mee</span><span class="logo-bomma">Bomma</span></div>
+    <div class="footer-links">
+      <a href="#">About</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a><a href="#">Careers</a>
+    </div>
+    <div class="footer-note">© 2025 meeBomma Entertainment Pvt. Ltd. · Bengaluru, India</div>
+    <div class="footer-note">Streams HD free with ads · 4K Dolby Atmos with Pro · Theatre data powered by BookMyShow</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
